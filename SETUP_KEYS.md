@@ -38,19 +38,20 @@ Auth is disabled. The app uses a **guest id** (cookie) instead of user accounts.
 
 ---
 
-## 4. **Google Gemini** (optional)
+## 4. **OpenAI** (optional – for Inngest AI)
 
-- [aistudio.google.com](https://aistudio.google.com) → Get API key → `GEMINI_API_KEY=...`
+- [platform.openai.com](https://platform.openai.com/api-keys) → Create API key → `OPENAI_API_KEY=...`
 
-Used for AI summaries; optional.
+Used for AI-generated welcome email intros and daily news summaries (Inngest workflows). Optional.
 
 ---
 
-## 5. **Nodemailer** (optional)
+## 5. **Resend** (optional – for custom emails)
 
-- Gmail: use App Password in `NODEMAILER_EMAIL` and `NODEMAILER_PASSWORD`.
+- [resend.com](https://resend.com) → Sign up → API Keys → Create key → `RESEND_API_KEY=re_...`
+- For testing you can use the default `onboarding@resend.dev` as sender. For production, set `RESEND_FROM_EMAIL` and verify your domain in Resend.
 
-Used for email alerts; optional.
+Used by Inngest to send welcome emails and daily news summaries. Supabase doesn’t send these; Resend is the provider (recommended by Supabase for custom email). Optional.
 
 ---
 
@@ -68,8 +69,8 @@ Used for email alerts; optional.
 | Supabase      | Yes (for watchlist) | [supabase.com](https://supabase.com) → Project → Settings → API |
 | MongoDB       | No        | Not used (guest-only mode) |
 | Better Auth   | No        | Not used |
-| Gemini        | No        | [aistudio.google.com](https://aistudio.google.com) |
-| Nodemailer    | No        | Gmail App Password or other SMTP |
+| OpenAI        | No        | [platform.openai.com](https://platform.openai.com/api-keys) |
+| Resend        | No        | [resend.com](https://resend.com) (API key) |
 | Inngest       | No (dev)  | `npx inngest-cli@latest dev` |
 
 After editing `.env`, restart the dev server (`pnpm dev`).

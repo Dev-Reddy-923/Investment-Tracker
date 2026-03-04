@@ -1,6 +1,6 @@
 import {inngest} from "@/lib/inngest/client";
 import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
-import {sendNewsSummaryEmail, sendWelcomeEmail} from "@/lib/nodemailer";
+import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/email";
 import {getAllUsersForNewsEmail} from "@/lib/actions/user.actions";
 import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
 import { getNews } from "@/lib/actions/finnhub.actions";
@@ -19,22 +19,17 @@ export const sendSignUpEmail = inngest.createFunction(
 
         const prompt = PERSONALIZED_WELCOME_EMAIL_PROMPT.replace('{{userProfile}}', userProfile)
 
-        const response = await step.ai.infer('generate-welcome-intro', {
-            model: step.ai.models.gemini({ model: 'gemini-2.5-flash-lite' }),
+        const response = await step.ai.infer("generate-welcome-intro", {
+            model: step.ai.models.openai({ model: "gpt-4o-mini" }),
             body: {
-                contents: [
-                    {
-                        role: 'user',
-                        parts: [
-                            { text: prompt }
-                        ]
-                    }]
-            }
-        })
+                messages: [{ role: "user" as const, content: prompt }],
+            },
+        });
 
         await step.run('send-welcome-email', async () => {
-            const part = response.candidates?.[0]?.content?.parts?.[0];
-            const introText = (part && 'text' in part ? part.text : null) ||'Thanks for joining Signalist. You now have the tools to track markets and make smarter moves.'
+            const introText =
+                (response as { choices?: Array<{ message?: { content?: string } }> })?.choices?.[0]?.message?.content?.trim() ||
+                "Thanks for joining Signalist. You now have the tools to track markets and make smarter moves."
 
             const { data: { email, name } } = event;
 
@@ -88,14 +83,15 @@ export const sendDailyNewsSummary = inngest.createFunction(
                     const prompt = NEWS_SUMMARY_EMAIL_PROMPT.replace('{{newsData}}', JSON.stringify(articles, null, 2));
 
                     const response = await step.ai.infer(`summarize-news-${user.email}`, {
-                        model: step.ai.models.gemini({ model: 'gemini-2.5-flash-lite' }),
+                        model: step.ai.models.openai({ model: "gpt-4o-mini" }),
                         body: {
-                            contents: [{ role: 'user', parts: [{ text:prompt }]}]
-                        }
+                            messages: [{ role: "user" as const, content: prompt }],
+                        },
                     });
 
-                    const part = response.candidates?.[0]?.content?.parts?.[0];
-                    const newsContent = (part && 'text' in part ? part.text : null) || 'No market news.'
+                    const newsContent =
+                      (response as { choices?: Array<{ message?: { content?: string } }> })?.choices?.[0]?.message?.content?.trim() ||
+                      "No market news.";
 
                     userNewsSummaries.push({ user, newsContent });
                 } catch (e) {
