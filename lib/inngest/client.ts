@@ -1,6 +1,6 @@
 import { Inngest } from "inngest";
 
 export const inngest = new Inngest({
-  id: "signalist",
+  id: "mockfolio",
   ai: { openai: { apiKey: process.env.OPENAI_API_KEY! } },
 });

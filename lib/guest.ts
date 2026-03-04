@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-const GUEST_ID_COOKIE = "signalist_guest_id";
+const GUEST_ID_COOKIE = "mockfolio_guest_id";
 
 function generateGuestId(): string {
   return `guest_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
