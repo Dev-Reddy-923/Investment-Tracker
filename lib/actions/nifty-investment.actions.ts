@@ -1,9 +1,9 @@
 /**
- * Nifty 50 ETF (NIFTYBEES) snapshot + P&L for a lump-sum investment.
- * Uses Yahoo Finance chart API (unofficial, no API key). For chart UI we use TradingView on the page.
+ * UTI Nifty 50 ETF (UTINIFTETF) snapshot + P&L for a lump-sum investment.
+ * Uses Yahoo Finance chart API (unofficial, no API key). Chart on page uses TradingView NSE:UTINIFTETF.
  */
 
-const YAHOO_NIFTY_ETF = 'NIFTYBEES.NS'; // Nippon India ETF Nifty 50 BeES — tracks Nifty 50
+const YAHOO_NIFTY_ETF = 'UTINIFTETF.NS'; // UTI Nifty 50 ETF — NSE
 
 export type NiftyInvestmentSnapshot = {
   ok: true;
@@ -56,7 +56,7 @@ export async function getNifty50InvestmentSnapshot(options?: {
     };
     const result = json.chart?.result?.[0];
     if (!result?.timestamp?.length || !result.indicators?.quote?.[0]?.close) {
-      return { ok: false, error: 'No price history returned for NIFTYBEES.' };
+      return { ok: false, error: 'No price history returned for UTINIFTETF (UTI Nifty 50 ETF).' };
     }
 
     const timestamps = result.timestamp;
@@ -107,7 +107,7 @@ export async function getNifty50InvestmentSnapshot(options?: {
     return {
       ok: true,
       symbol: YAHOO_NIFTY_ETF,
-      name: meta.shortName ?? 'Nippon India ETF Nifty 50 BeES',
+      name: meta.shortName ?? 'UTI Nifty 50 ETF',
       currency: meta.currency ?? 'INR',
       investmentAmount,
       investmentDaysAgo: daysAgo,
