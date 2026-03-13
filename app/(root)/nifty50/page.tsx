@@ -2,7 +2,7 @@ import TradingViewWidget from '@/components/TradingViewWidget';
 import { CANDLE_CHART_WIDGET_CONFIG } from '@/lib/constants';
 import { getNifty50InvestmentSnapshot, formatINR } from '@/lib/actions/nifty-investment.actions';
 
-const NSE_NIFTY_ETF = 'NSE:UTINIFTETF';
+const NSE_NIFTY_ETF = 'NSE:NIFTYBEES';
 
 export default async function Nifty50Page() {
   const snapshot = await getNifty50InvestmentSnapshot({
@@ -14,12 +14,11 @@ export default async function Nifty50Page() {
   return (
     <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
       <div>
-        <h1 className="text-2xl font-semibold text-zinc-100">UTI Nifty 50 ETF</h1>
+        <h1 className="text-2xl font-semibold text-zinc-100">Nifty 50 index ETF</h1>
         <p className="text-zinc-500 text-sm mt-1 max-w-2xl">
-          Chart and P&amp;L use <strong className="text-zinc-400">UTI Nifty 50 ETF</strong> (
-          {NSE_NIFTY_ETF}) on NSE — same Nifty 50 index, UTI’s listed ETF. Daily prices from public data;
-          not financial advice. If you hold the <em>direct plan index fund</em> (not the ETF), NAV differs
-          slightly from this ETF price.
+          Chart and P&amp;L use <strong className="text-zinc-400">Nippon India ETF Nifty 50 BeES</strong> (
+          {NSE_NIFTY_ETF}) — same Nifty 50 index as other Nifty 50 funds/ETFs. Daily prices from public
+          data; not financial advice.
         </p>
       </div>
 
@@ -59,12 +58,12 @@ export default async function Nifty50Page() {
       )}
 
       <TradingViewWidget
-        title="UTINIFTETF — UTI Nifty 50 ETF (daily)"
+        title="NIFTYBEES — Nifty 50 BeES (daily)"
         scriptUrl={`${scriptUrl}advanced-chart.js`}
         config={CANDLE_CHART_WIDGET_CONFIG(NSE_NIFTY_ETF)}
         className="custom-chart"
         height={560}
-        fullscreenLabel="UTI Nifty 50 ETF — chart"
+        fullscreenLabel="Nifty 50 BeES — chart"
       />
 
       <p className="text-xs text-zinc-600">
